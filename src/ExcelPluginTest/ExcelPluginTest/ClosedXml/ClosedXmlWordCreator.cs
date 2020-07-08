@@ -1,12 +1,15 @@
 ﻿namespace ExcelPluginTest.ClosedXml
 {
+    using System;
     using System.IO;
+    using System.Linq;
 
     using DocumentFormat.OpenXml;
     using DocumentFormat.OpenXml.Packaging;
     using DocumentFormat.OpenXml.Wordprocessing;
 
     using ExcelPluginTest.ExportData;
+    using ExcelPluginTest.Extensions;
     using ExcelPluginTest.Interfaces;
 
     public class ClosedXmlWordCreator : IWordCreator
@@ -107,69 +110,195 @@
                     // Add your paragraph to docx body
 
                     mainDocument.Document.Body.Append(p);
+
+                    AddTable(mainDocument.Document.Body, data.First());
                 }
-
-                //var document = WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document, true);
-                //var mainDocument = document.AddMainDocumentPart();
-
-                //AddStyles(mainDocument.AddNewPart<StyleDefinitionsPart>());
-
-                //mainDocument.Document = new Document();
-                //mainDocument.Document.Body = new Body();
-
-                //AddParagraph(mainDocument.Document.Body, WordCreatorNames.Heading1Id, "This is a heading");
-
-                //mainDocument.Document.Save();
-                //document.Save();
 
                 return stream.ToArray();
             }
         }
 
-        private void AddStyles(StyleDefinitionsPart styleCollection)
+        private void AddTable(Body docBody, ExportDataRecord data)
         {
-            var runProperties = new RunProperties();
-            runProperties.Append(new Color { Val = "000000" });
-            runProperties.Append(new RunFonts { Ascii = "Arial" });
-            runProperties.Append(new Bold());
-            runProperties.Append(new FontSize { Val = "28" });
+            var table = new Table();
+            var tableProperties = new TableProperties();
+            var tableStyle = new TableStyle { Val = "TableGrid" };
+            var tableWidth = new TableWidth { Width = "1500", Type = TableWidthUnitValues.Pct};
+            var tableBorders = new TableBorders
+                                   {
+                                       TopBorder = new TopBorder { Val = new EnumValue<BorderValues>(BorderValues.BasicThinLines) },
+                                       BottomBorder = new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.BasicThinLines) },
+                                       LeftBorder = new LeftBorder { Val = new EnumValue<BorderValues>(BorderValues.BasicThinLines) },
+                                       RightBorder = new RightBorder { Val = new EnumValue<BorderValues>(BorderValues.BasicThinLines) },
+                                       InsideHorizontalBorder = new InsideHorizontalBorder { Val = new EnumValue<BorderValues>(BorderValues.BasicThinLines) },
+                                       InsideVerticalBorder = new InsideVerticalBorder { Val = new EnumValue<BorderValues>(BorderValues.BasicThinLines) }
+                                   };
+            tableProperties.Append(tableStyle, tableWidth, tableBorders);
+            table.Append(tableProperties);
 
-            var style = new Style
-                            {
-                                StyleId = WordCreatorNames.Heading1Id,
-                                Type = StyleValues.Paragraph,
-                                CustomStyle = true
-                            };
-            style.Append(new StyleName { Val = WordCreatorNames.Heading1Id });
-            style.Append(new BasedOn { Val = "Heading1" });
-            style.Append(new NextParagraphStyle { Val = "Normal" });
-            style.Append(runProperties);
+            AddTableRow(table, nameof(ExportDataRecord.Title), data.Title);
+            AddTableRow(table, nameof(ExportDataRecord.Forename), data.Forename);
+            AddTableRow(table, nameof(ExportDataRecord.Surname), data.Surname);
+            AddTableRow(table, nameof(ExportDataRecord.PreviousSurname), data.PreviousSurname);
+            AddTableRow(table, nameof(ExportDataRecord.Profession), data.Profession);
+            AddTableRow(table, nameof(ExportDataRecord.Number), data.Number);
+            AddTableRow(table, nameof(ExportDataRecord.NumberReference), data.NumberReference);
+            AddTableRow(table, nameof(ExportDataRecord.NumberDate), data.NumberDate);
+            AddTableRow(table, nameof(ExportDataRecord.PreviouslyProvided), data.PreviouslyProvided);
+            AddTableRow(table, nameof(ExportDataRecord.PreviouslyProvidedReference), data.PreviouslyProvidedReference);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryOne), data.CategoryOne);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTwo), data.CategoryTwo);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThree), data.CategoryThree);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryFour), data.CategoryFour);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryFive), data.CategoryFive);
+            AddTableRow(table, nameof(ExportDataRecord.CategorySix), data.CategorySix);
+            AddTableRow(table, nameof(ExportDataRecord.CategorySeven), data.CategorySeven);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryEight), data.CategoryEight);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryNine), data.CategoryNine);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTen), data.CategoryTen);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryEleven), data.CategoryEleven);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTwelve), data.CategoryTwelve);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThirteen), data.CategoryThirteen);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryFourteen), data.CategoryFourteen);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryFifteen), data.CategoryFifteen);
+            AddTableRow(table, nameof(ExportDataRecord.CategorySixteen), data.CategorySixteen);
+            AddTableRow(table, nameof(ExportDataRecord.CategorySeventeen), data.CategorySeventeen);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryEighteen), data.CategoryEighteen);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryNineteen), data.CategoryNineteen);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTwenty), data.CategoryTwenty);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTwentyOne), data.CategoryTwentyOne);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTwentyTwo), data.CategoryTwentyTwo);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTwentyThree), data.CategoryTwentyThree);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTwentyFour), data.CategoryTwentyFour);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTwentyFive), data.CategoryTwentyFive);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTwentySix), data.CategoryTwentySix);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTwentySeven), data.CategoryTwentySeven);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTwentyEight), data.CategoryTwentyEight);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryTwentyNine), data.CategoryTwentyNine);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThirty), data.CategoryThirty);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThirtyOne), data.CategoryThirtyOne);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThirtyTwo), data.CategoryThirtyTwo);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThirtyThree), data.CategoryThirtyThree);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThirtyFour), data.CategoryThirtyFour);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThirtyFive), data.CategoryThirtyFive);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThirtySix), data.CategoryThirtySix);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThirtySeven), data.CategoryThirtySeven);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThirtyEight), data.CategoryThirtyEight);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThirtyNine), data.CategoryThirtyNine);
+            AddTableRow(table, nameof(ExportDataRecord.CategoryThirtyTen), data.CategoryThirtyTen);
+            AddTableRow(table, nameof(ExportDataRecord.When), data.When);
+            AddTableRow(table, nameof(ExportDataRecord.OriginOne), data.OriginOne);
+            AddTableRow(table, nameof(ExportDataRecord.OriginTwo), data.OriginTwo);
+            AddTableRow(table, nameof(ExportDataRecord.OriginThree), data.OriginThree);
+            AddTableRow(table, nameof(ExportDataRecord.Reference), data.Reference);
+            AddTableRow(table, nameof(ExportDataRecord.ContactOne), data.ContactOne);
+            AddTableRow(table, nameof(ExportDataRecord.ContactTwo), data.ContactTwo);
+            AddTableRow(table, nameof(ExportDataRecord.ContactThree), data.ContactThree);
+            AddTableRow(table, nameof(ExportDataRecord.ContactFour), data.ContactFour);
+            AddTableRow(table, nameof(ExportDataRecord.ContactFive), data.ContactFive);
+            AddTableRow(table, nameof(ExportDataRecord.ContactSix), data.ContactSix);
+            AddTableRow(table, nameof(ExportDataRecord.ContactSeven), data.ContactSeven);
+            AddTableRow(table, nameof(ExportDataRecord.ContactEight), data.ContactEight);
+            AddTableRow(table, nameof(ExportDataRecord.AlternateContactOne), data.AlternateContactOne);
+            AddTableRow(table, nameof(ExportDataRecord.AlternateContactTwo), data.AlternateContactTwo);
+            AddTableRow(table, nameof(ExportDataRecord.AlternateContactThree), data.AlternateContactThree);
+            AddTableRow(table, nameof(ExportDataRecord.AlternateContactFour), data.AlternateContactFour);
+            AddTableRow(table, nameof(ExportDataRecord.AlternateContactFive), data.AlternateContactFive);
+            AddTableRow(table, nameof(ExportDataRecord.AlternateContactSix), data.AlternateContactSix);
+            AddTableRow(table, nameof(ExportDataRecord.AlternateContactSeven), data.AlternateContactSeven);
+            AddTableRow(table, nameof(ExportDataRecord.AlternateContactEight), data.AlternateContactEight);
+            AddTableRow(table, nameof(ExportDataRecord.DeclarationOne), data.DeclarationOne);
+            AddTableRow(table, nameof(ExportDataRecord.DeclarationTwo), data.DeclarationTwo);
+            AddTableRow(table, nameof(ExportDataRecord.DeclarationThree), data.DeclarationThree);
+            AddTableRow(table, nameof(ExportDataRecord.DeclarationFour), data.DeclarationFour);
+            AddTableRow(table, nameof(ExportDataRecord.DeclarationFive), data.DeclarationFive);
+            AddTableRow(table, nameof(ExportDataRecord.DeclarationSix), data.DeclarationSix);
+            AddTableRow(table, nameof(ExportDataRecord.EducationOne), data.EducationOne);
+            AddTableRow(table, nameof(ExportDataRecord.EducationTwo), data.EducationTwo);
+            AddTableRow(table, nameof(ExportDataRecord.EducationThree), data.EducationThree);
+            AddTableRow(table, nameof(ExportDataRecord.EducationFour), data.EducationFour);
+            AddTableRow(table, nameof(ExportDataRecord.EducationFive), data.EducationFive);
+            AddTableRow(table, nameof(ExportDataRecord.EducationSix), data.EducationSix);
+            AddTableRow(table, nameof(ExportDataRecord.EducationModeOne), data.EducationModeOne);
+            AddTableRow(table, nameof(ExportDataRecord.EducationModeTwo), data.EducationModeTwo);
+            AddTableRow(table, nameof(ExportDataRecord.EducationModeThree), data.EducationModeThree);
+            AddTableRow(table, nameof(ExportDataRecord.EducationModeFour), data.EducationModeFour);
+            AddTableRow(table, nameof(ExportDataRecord.EducationModeFive), data.EducationModeFive);
+            AddTableRow(table, nameof(ExportDataRecord.EducationModeSix), data.EducationModeSix);
+            AddTableRow(table, nameof(ExportDataRecord.EducationModeSeven), data.EducationModeSeven);
+            AddTableRow(table, nameof(ExportDataRecord.EducationModeEight), data.EducationModeEight);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactSeven), data.ExternalContactSeven);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactEight), data.ExternalContactEight);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactNine), data.ExternalContactNine);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactTen), data.ExternalContactTen);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactEleven), data.ExternalContactEleven);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactTwelve), data.ExternalContactTwelve);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactThirteen), data.ExternalContactThirteen);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactFourteen), data.ExternalContactFourteen);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactFifteen), data.ExternalContactFifteen);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactSixteen), data.ExternalContactSixteen);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactSeventeen), data.ExternalContactSeventeen);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactEighteen), data.ExternalContactEighteen);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactNineteen), data.ExternalContactNineteen);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactTwenty), data.ExternalContactTwenty);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactTwentyOne), data.ExternalContactTwentyOne);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactTwentyTwo), data.ExternalContactTwentyTwo);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactTwentyThree), data.ExternalContactTwentyThree);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactTwentyFour), data.ExternalContactTwentyFour);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactTwentyFive), data.ExternalContactTwentyFive);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactTwentySix), data.ExternalContactTwentySix);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactTwentySeven), data.ExternalContactTwentySeven);
+            AddTableRow(table, nameof(ExportDataRecord.ExternalContactTwentyEight), data.ExternalContactTwentyEight);
 
-            // we have to add style that we have created to the StylePart
-            styleCollection.Styles = new Styles();
-            styleCollection.Styles.Append(style);
-            styleCollection.Styles.Save(); // we save the style part
+            docBody.Append(table);
         }
 
-        private void AddParagraph(Body documentBody, string styleId, string value)
+        public void AddTableRow(Table documentTable, string label, string value)
         {
-            var paragraph = new Paragraph();
-            paragraph.ParagraphProperties = new ParagraphProperties();
-            paragraph.ParagraphProperties.ParagraphStyleId = new ParagraphStyleId { Val = styleId };
+            var row = new TableRow();
 
-            var run = new Run();
-            var paragraphText = new Text(value);
-            run.Append(paragraphText);
-            paragraph.Append(run);
+            var labelCell = new TableCell();
+            labelCell.Append(GetCellProperties());
+            var labelParagraph = new Paragraph(new Run(new Text(label)));
+            labelCell.Append(labelParagraph);
+            row.Append(labelCell);
 
-            documentBody.Append(paragraph);
+            var valueCell = new TableCell();
+            valueCell.Append(GetCellProperties());
+            var valueParagraph = new Paragraph(new Run(new Text(value)));
+            valueCell.Append(valueParagraph);
+            row.Append(valueCell);
+
+            documentTable.Append(row);
         }
-    }
 
-    public static class WordCreatorNames
-    {
-        public const string Heading1Id = "TwentysixHeading1";
+        public void AddTableRow(Table documentTable, string label, bool value)
+        {
+            AddTableRow(documentTable, label, value.ToYesNo());
+        }
 
-        public const string Heading1Name = "Twentysix Heading 1";
+        public void AddTableRow(Table documentTable, string label, DateTime value)
+        {
+            AddTableRow(documentTable, label, value.ToString("dd/MM/yyyy"));
+        }
+
+        public void AddTableRow(Table documentTable, string label, decimal value)
+        {
+            AddTableRow(documentTable, label, value.ToString("F2"));
+        }
+
+        public TableCellProperties GetCellProperties()
+        {
+            return new TableCellProperties
+                       {
+                           TableCellMargin = new TableCellMargin
+                                                 {
+                                                     TopMargin = new TopMargin { Width = "20", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) },
+                                                     BottomMargin = new BottomMargin { Width = "20", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) },
+                                                     LeftMargin = new LeftMargin { Width = "20", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) },
+                                                     RightMargin = new RightMargin { Width = "20", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) }
+                                                 }
+                       };
+        }
     }
 }

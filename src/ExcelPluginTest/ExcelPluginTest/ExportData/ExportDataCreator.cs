@@ -15,7 +15,7 @@
 
         public List<ExportDataRecord> Create(int records)
         {
-            return Enumerable.Range(0, records - 1).Select(x => CreateRecord()).ToList();
+            return Enumerable.Range(0, records).Select(x => CreateRecord()).ToList();
         }
 
         private ExportDataRecord CreateRecord()
