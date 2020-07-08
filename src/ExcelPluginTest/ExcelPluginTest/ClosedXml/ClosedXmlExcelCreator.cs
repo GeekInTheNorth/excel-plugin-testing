@@ -7,11 +7,11 @@
     using ExcelPluginTest.ExportData;
     using ExcelPluginTest.Interfaces;
 
-    public class ClosedXmlCreator : IExcelCreator
+    public class ClosedXmlExcelCreator : IExcelCreator
     {
         private readonly ExportDataCreator _creator;
 
-        public ClosedXmlCreator()
+        public ClosedXmlExcelCreator()
         {
             _creator = new ExportDataCreator();
         }

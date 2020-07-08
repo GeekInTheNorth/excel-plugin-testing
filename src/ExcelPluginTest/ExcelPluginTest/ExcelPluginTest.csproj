@@ -125,7 +125,8 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="ClosedXml\ClosedXmlCreator.cs" />
+    <Compile Include="ClosedXml\ClosedXmlExcelCreator.cs" />
+    <Compile Include="ClosedXml\ClosedXmlWordCreator.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="ExportData\ExportDataRecord.cs" />
     <Compile Include="ExportData\ExportDataCreator.cs" />
@@ -133,6 +134,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IExcelCreator.cs" />
+    <Compile Include="Interfaces\IWordCreator.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

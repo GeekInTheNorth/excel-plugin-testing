@@ -13,7 +13,10 @@
     <body>
         <div>
             <h1>Just a test site creating an empty excel file</h1>
-            @Html.ActionLink("Get Test File", "Document")
+            <ul>
+                <li>@Html.ActionLink("Get Test Excel File", "Excel")</li>
+                <li>@Html.ActionLink("Get Test Word File", "Document")</li>
+            </ul>
         </div>
     </body>
 </html>

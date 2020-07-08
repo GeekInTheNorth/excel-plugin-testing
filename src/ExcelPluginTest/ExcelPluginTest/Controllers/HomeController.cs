@@ -10,9 +10,12 @@
     {
         private IExcelCreator excelCreator;
 
+        private IWordCreator wordCreator;
+
         public HomeController()
         {
-            excelCreator = new ClosedXmlCreator();
+            excelCreator = new ClosedXmlExcelCreator();
+            wordCreator = new ClosedXmlWordCreator();
         }
 
         public ActionResult Index()
@@ -22,11 +25,18 @@
             return this.View(model);
         }
 
-        public FileResult Document()
+        public FileResult Excel()
         {
             var document = excelCreator.Create();
 
-            return this.File(document, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            return this.File(document, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "excel-test.xlsx");
+        }
+
+        public FileResult Document()
+        {
+            var document = wordCreator.Create();
+
+            return this.File(document, "application/vnd.openxmlformats-officedocument.wordprocessing", "word-test.docx");
         }
     }
 }
